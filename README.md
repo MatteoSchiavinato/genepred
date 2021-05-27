@@ -32,6 +32,9 @@ For an overview on how I used it last time, see the `run_****.sh` script contain
 
 ### Before you begin
 
+**Do you have the dependencies installed??**
+Run `check_dependencies.py` to find out ;) 
+
 To use this pipeline, you will need:
 - **BAM** or **PSL** files obtained by mapping RNASeq reads onto the genome sequence where the prediction has to be done. The pipeline can handle both at the same time, so you don't have to choose.
 - A **FASTA** genome sequence which is the same where you mapped the reads.
