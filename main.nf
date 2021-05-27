@@ -63,7 +63,7 @@ if (params.help) {
 
   ### augustus ###
 
-  --gene_model                "complete" or "partial"
+  --gene_model                "complete" or "partial" (complete)
   --species_name              Parameters to use from the Augustus config/species directory
                               (choose from: "augustus*/config/species/...")
   --augustus_bin              Path to the scripts for BAM hints preparation
