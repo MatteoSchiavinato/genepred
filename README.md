@@ -64,13 +64,13 @@ This tutorial brings you from the beginning to the end of a single gene predicti
 
 ### Read mapping
 
-To generate mapping files from your short RNASeq reads you can use any program you like, for example hisat2 (for BAM files) or BLAT (for PSL files). The original Augustus guidelines use BLAT, which is however an old tool (2002). Hence, they progressively moved towards BAM files over time. In my pipeline, you can use both formats at the same time, so there's no need to choose if you want to use both.
+To generate mapping files from your short RNASeq reads you can use any program you like, for example [hisat2](http://daehwankimlab.github.io/hisat2/manual "HISAT2 manual") (for BAM files) or [BLAT](https://genome.ucsc.edu/goldenpath/help/blatSpec.html "BLAT manual") (for PSL files). The original Augustus guidelines use [BLAT](https://genome.ucsc.edu/goldenpath/help/blatSpec.html "BLAT manual"), which is however an old tool (2002). Hence, they progressively moved towards BAM files over time. In my pipeline, you can use both formats at the same time, so there's no need to choose if you want to use both.
 
 Here you can find basic instructions to map your reads with these two programs.
 
 ##### HISAT2
 
-Hisat2 requires that you first build an index:
+[hisat2](http://daehwankimlab.github.io/hisat2/manual "HISAT2 manual") requires that you first build an index:
 
 ```
 hisat2-build \
@@ -79,7 +79,7 @@ hisat2-build \
 <output_prefix>
 ```
 
-The genome FASTA must be the one you want to predict your genes on. Usually, I use the same name as the genome FASTA also for the output prefix, this way the program will generate index files ending in `*.ht2` right next to the genome sequence. However, this is your choice. All hisat2 needs to map reads is the index, once it's generated.
+The genome FASTA must be the one you want to predict your genes on. Usually, I use the same name as the genome FASTA also for the output prefix, this way the program will generate index files ending in `*.ht2` right next to the genome sequence. However, this is your choice. All [hisat2](http://daehwankimlab.github.io/hisat2/manual "HISAT2 manual") needs to map reads is the index, once it's generated.
 
 Once the index is generated, you can then map your reads. Here you can see how I ran it, with the parameters I set. Check parameters meaning and usage on their main manual page.
 
@@ -118,9 +118,9 @@ The output files of this command are ready to be used in my pipeline. Try to nam
 
 ##### BLAT
 
-BLAT is a Blast-Like-Alignment-Tool which was released the first time in 2002. It can be painfully slow (i.e. weeks) if you don't set parameters with a grain of salt. After half a PhD spent on gene prediction, I figured these are the settings that work for me. They may not work for you, so understand them well (through their manual) and set them the way you want. A few years later they released **pblat**, which is blat with parallelization.
+[BLAT](https://genome.ucsc.edu/goldenpath/help/blatSpec.html "BLAT manual") is a Blast-Like-Alignment-Tool which was released the first time in 2002. It can be painfully slow (i.e. weeks) if you don't set parameters with a grain of salt. After half a PhD spent on gene prediction, I figured these are the settings that work for me. They may not work for you, so understand them well (through their manual) and set them the way you want. A few years later they released **pblat**, which is [BLAT](https://genome.ucsc.edu/goldenpath/help/blatSpec.html "BLAT manual") with parallelization.
 
-A characteristic of BLAT is that it cannot map paired-end reads. However, there is a workaround which is to map R1 and R2 separately and then join them afterwards. Hence, for BLAT mapping treat them as two independent single end files. Here, the example uses pblat, which works exactly like blat but has a `-threads` option.
+A characteristic of [BLAT](https://genome.ucsc.edu/goldenpath/help/blatSpec.html "BLAT manual") is that it cannot map paired-end reads. However, there is a workaround which is to map R1 and R2 separately and then join them afterwards. Hence, for [BLAT](https://genome.ucsc.edu/goldenpath/help/blatSpec.html "BLAT manual") mapping treat them as two independent single end files. Here, the example uses pblat, which works exactly like [BLAT](https://genome.ucsc.edu/goldenpath/help/blatSpec.html "BLAT manual") but has a `-threads` option.
 
 ```
 pblat \
@@ -140,7 +140,7 @@ pblat \
 <output_psl_file>
 ```
 
-The `-noHead` option prevents the addition of a header. This may not help the human reader but helps the filtering afterwards so use it. Another option that requires discussion is `-minIdentity`. This option sets the minimum sequence identity between a read and the target genome sequence. This should be adjusted according to your estimation of divergence between reads and reference. If you set it close to 99, the program will be faster. However, to leverage the real power of BLAT (the heuristic approach) you should not keep it too tight. In fact, BLAT can map reads quite well at low sequence identity, due to the fact that it doesn't have an index of k-mers to read from. Do some testing! Finally, the `-maxIntron` option sets how long an intron can be (i.e. a split in a read). Increasing this value makes the program become horribly slow, so handle with care.
+The `-noHead` option prevents the addition of a header. This may not help the human reader but helps the filtering afterwards so use it. Another option that requires discussion is `-minIdentity`. This option sets the minimum sequence identity between a read and the target genome sequence. This should be adjusted according to your estimation of divergence between reads and reference. If you set it close to 99, the program will be faster. However, to leverage the real power of [BLAT](https://genome.ucsc.edu/goldenpath/help/blatSpec.html "BLAT manual") (the heuristic approach) you should not keep it too tight. In fact, [BLAT](https://genome.ucsc.edu/goldenpath/help/blatSpec.html "BLAT manual") can map reads quite well at low sequence identity, due to the fact that it doesn't have an index of k-mers to read from. Do some testing! Finally, the `-maxIntron` option sets how long an intron can be (i.e. a split in a read). Increasing this value makes the program become horribly slow, so handle with care.
 
 Once the mapping is done, you have to filter the files. The filtering command below is for paired-end reads, but for single-end reads it works the same, just substitute `cat <psl_file_R1> <psl_file_R2>` with `cat <psl_file>` because there is only a single file, and remove the `--paired` option from the `filterPSL.pl` step.
 
@@ -160,7 +160,7 @@ In this command, the `LC_ALL` setting is the same as specified above so I won't 
 just navigate
 ##### Long-read mapping
 
-Long-read RNA reads are becoming established in the world of research, so I decided to include them in the pipeline since we wanted to use them for a project. After consulting with Katharina Hoff, one of the Augustus authors, I received instructions on how they would handle long reads in the Augustus pipeline (which is how I implemented it in the code). Here, you can see how I mapped the reads. For the mapping I use minimap2, a very common tool for long read mapping. It's very easy and fast so I would strongly recommend using this. If not, any tool producing a BAM file will do.
+Long-read RNA reads are becoming established in the world of research, so I decided to include them in the pipeline since we wanted to use them for a project. After consulting with Katharina Hoff, one of the Augustus authors, I received instructions on how they would handle long reads in the Augustus pipeline (which is how I implemented it in the code). Here, you can see how I mapped the reads. For the mapping I use [minimap2](https://lh3.github.io/minimap2/minimap2.html "minimap2 manual"), a very common tool for long read mapping. It's very easy and fast so I would strongly recommend using this. If not, any tool producing a BAM file will do.
 
 ```
 minimap2 \
@@ -179,12 +179,12 @@ minimap2 \
 <read_file>
 ```
 
-The `-k` option sets the kmer size used for the mapping. See the minimap manual for understanding how this parameter works. The file specified with `-d` is the index created by minimap2, so you can use any name. You can read the description of the other options on their manual. What is important is that you specify an output BAM file with `-o`, providing a genome sequence and your read file in FASTA format.
+The `-k` option sets the kmer size used for the mapping. See the minimap manual for understanding how this parameter works. The file specified with `-d` is the index created by [minimap2](https://lh3.github.io/minimap2/minimap2.html "minimap2 manual"), so you can use any name. You can read the description of the other options on their manual. What is important is that you specify an output BAM file with `-o`, providing a genome sequence and your read file in FASTA format.
 
 
 ### Running the pipeline
 
-Once you have filtered and sorted mapping records from at least one source (be it hisat2, blat, or minimap2), you can use the pipeline.
+Once you have filtered and sorted mapping records from at least one source (be it [hisat2](http://daehwankimlab.github.io/hisat2/manual "HISAT2 manual"), [BLAT](https://genome.ucsc.edu/goldenpath/help/blatSpec.html "BLAT manual"), or [minimap2](https://lh3.github.io/minimap2/minimap2.html "minimap2 manual")), you can use the pipeline.
 
 ##### species parameters
 
