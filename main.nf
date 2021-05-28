@@ -14,15 +14,8 @@ if (params.help) {
 
   ------------------------------------------------------------------------------
 
-  BASIC INFO
-
-  (1) the parallelization by file is done automatically on a slurm queuing system
-  (2) just sbatch the main nextflow command and let it do the rest
-  (3) adjust the "clusterOptions" option in the "nextflow.config" file according to your needs
-      There is a sorting step, so make sure -not- to use nodes with little RAM
-  (4) Augustus options depend on your augustus base directory (which I refer to as "augustus*")
-  (5) filterPSL.pl and filterBam depend on a few criteria. See Augustus hints preparation
-      for details. This workflow assumes that you've followed them.
+  WARNING: AUGUSTUS uses a lot of RAM
+  Make sure you have approximately 20GB RAM x num. threads available on your PC
 
   ------------------------------------------------------------------------------
 
@@ -33,17 +26,6 @@ if (params.help) {
   --help                      This help message
   --output_directory          Create this directory and put everything in there
   --threads                   Number of parallel threads to use in mapping of each file (16)
-                              Currently optimized for only 1-16 threads
-
-  --executor                  Choose if "slurm" or "local" (Default: slurm)
-                              slurm: automatically submits sbatch files to the queuing manager
-                              local: runs on the command line as a normal command
-
-  ### slurm options ###
-
-  --account                   The account to use for jobs (p70694)
-  --partition                 The partition to use for jobs (vsc3plus_0064)
-  --qos                       The quality of service to use for jobs (vsc3plus_0064)
 
   ### input ###
 
@@ -65,7 +47,10 @@ if (params.help) {
 
   --gene_model                "complete" or "partial" (complete)
   --species_name              Parameters to use from the Augustus config/species directory
-                              (choose from: "augustus*/config/species/...")
+                              (choose from: "augustus*/config/species/...")  --noise_reduction_script    Path to script to perform noise reduction. Get it from
+                              Minoche et al., 2015 (https://doi.org/10.1186/s13059-015-0729-7)
+                              In the supplementary material
+
   --augustus_bin              Path to the scripts for BAM hints preparation
                               (usually: "/bin" or "/auxprogs")
   --augustus_scripts          Path to the scripts for PSL hints preparation
@@ -74,9 +59,6 @@ if (params.help) {
                               to be a folder named exactly like the declared [--species_name]
   --extrinsic                 "extrinsic.cfg" file for gene prediction parameters
                               (usually: "augustus*/config/extrinsic/...")
-  --noise_reduction_script    Path to script to perform noise reduction. Get it from
-                              Minoche et al., 2015 (https://doi.org/10.1186/s13059-015-0729-7)
-                              In the supplementary material
 
   ### prediction filtering ###
 

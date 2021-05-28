@@ -18,10 +18,11 @@ echo """\
 #SBATCH --mail-type FAIL,END
 #SBATCH --mail-user matteo.schiavinato@boku.ac.at
 
-cd ${WD}/scripts 
+cd ${WD}/scripts
 
 nextflow \
 main.nf \
+-resume \
 -work-dir ${WD}/${OUTDIR}/work \
 -with-report ${WD}/${OUTDIR}/cmd.sbatch.report.html \
 -with-timeline ${WD}/${OUTDIR}/cmd.sbatch.timeline.html \
