@@ -7,11 +7,11 @@ if (params.help) {
 
   ------------------------------------------------------------------------------
 
-  Matteo Schiavinato
-  matteo.schiavinato.90@gmail.com
-  December 2020 - May 2021
-  Gene Prediction pipeline (originally for Beta vulgaris)
+  A Nextflow pipeline for gene prediction and functional annotation
 
+  Written and maintained by Matteo Schiavinato
+  Barcelona Supercomputing Center (BSC-CNS)
+  2020-2022
   ------------------------------------------------------------------------------
 
   WARNING: AUGUSTUS uses a lot of RAM
@@ -100,10 +100,6 @@ if (params.bam_long) {
     cpus = 1
     maxForks = params.threads
 
-    // executor = "${params.executor}"
-    // module = []
-    // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
-
     publishDir "${WD}/process/evidence", mode: 'copy', pattern: '*.bam.long.hints.gff'
 
     input:
@@ -145,10 +141,6 @@ if (params.psl) {
     cpus = 1
     maxForks = params.threads
 
-    // executor = "${params.executor}"
-    // module = []
-    // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
-
     publishDir "${WD}/process/blat2hints", mode: 'copy', pattern: '*.psl.introns.gff'
 
     input:
@@ -176,10 +168,6 @@ if (params.psl) {
     executor = "local"
     cpus = 1
     maxForks = params.threads
-
-    // executor = "${params.executor}"
-    // module = []
-    // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
 
     publishDir "${WD}/process/aln2wig", mode: 'copy', pattern: '*.psl.exons.wig'
 
@@ -211,10 +199,6 @@ if (params.psl) {
     cpus = 1
     maxForks = params.threads
 
-    // executor = "${params.executor}"
-    // module = []
-    // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
-
     publishDir "${WD}/process/evidence", mode: 'copy', pattern: '*.psl.{introns,exons}.nr.{gff,wig}'
 
     input:
@@ -241,10 +225,6 @@ if (params.psl) {
     executor = "local"
     cpus = 1
     maxForks = params.threads
-
-    // executor = "${params.executor}"
-    // module = []
-    // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
 
     publishDir "${WD}/process/evidence", mode: 'copy', pattern: '*.psl.exons.nr.gff'
 
@@ -292,10 +272,6 @@ if (params.bam) {
     cpus = 1
     maxForks = params.threads
 
-    // executor = "${params.executor}"
-    // module = []
-    // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
-
     publishDir "${WD}/process/bam2hints", mode: 'copy', pattern: '*.bam.introns.gff'
 
     input:
@@ -322,10 +298,6 @@ if (params.bam) {
     executor = "local"
     cpus = 1
     maxForks = params.threads
-
-    // executor = "${params.executor}"
-    // module = []
-    // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
 
     publishDir "${WD}/process/bam2wig", mode: 'copy', pattern: '*.bam.exons.wig'
 
@@ -358,10 +330,6 @@ if (params.bam) {
     cpus = 1
     maxForks = params.threads
 
-    // executor = "${params.executor}"
-    // module = []
-    // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
-
     publishDir "${WD}/process/evidence", mode: 'copy', pattern: '*.bam.{introns,exons}.nr.{gff,wig}'
 
     input:
@@ -387,10 +355,6 @@ if (params.bam) {
     executor = "local"
     cpus = 1
     maxForks = params.threads
-
-    // executor = "${params.executor}"
-    // module = []
-    // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
 
     publishDir "${WD}/process/evidence", mode: 'copy', pattern: '*.bam.exons.nr.gff'
 
@@ -428,10 +392,6 @@ if (params.repeats_gff) {
     cpus = 1
     maxForks = params.threads
 
-    // executor = "${params.executor}"
-    // module = []
-    // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
-
     publishDir "${WD}/process/evidence", mode: 'copy', pattern: "repeat_hints.gff"
 
     input:
@@ -465,10 +425,6 @@ if (params.repeats_gff) {
       cpus = 1
       maxForks = params.threads
 
-      // executor = "${params.executor}"
-      // module = []
-      // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
-
       publishDir "${WD}/augustus/hints", mode: 'copy', pattern: "merged.hints.gff"
 
       input:
@@ -494,10 +450,6 @@ if (params.repeats_gff) {
       executor = "local"
       cpus = 1
       maxForks = params.threads
-
-      // executor = "${params.executor}"
-      // module = []
-      // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
 
       publishDir "${WD}/augustus/hints", mode: 'copy', pattern: "merged.hints.gff"
 
@@ -529,10 +481,6 @@ process split_genome {
   cpus = 1
   maxForks = params.threads
 
-  // executor = "${params.executor}"
-  // module = []
-  // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
-
   input:
     file fasta from Fasta_file
 
@@ -557,10 +505,6 @@ process run_augustus {
   executor = "local"
   cpus = 1
   maxForks = params.threads
-
-  // executor = "${params.executor}"
-  // module = []
-  // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
 
   publishDir "${WD}/process/split_prediction",
   mode: 'copy',
@@ -598,10 +542,6 @@ process join_aug_pred {
   cpus = 1
   maxForks = params.threads
 
-  // executor = "${params.executor}"
-  // module = []
-  // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
-
   publishDir "${WD}/augustus/proc.raw_gene_set",
   mode: "copy",
   pattern: "*gff"
@@ -627,10 +567,6 @@ process get_anno_fasta {
   executor = "local"
   cpus = 1
   maxForks = params.threads
-
-  // executor = "${params.executor}"
-  // module = []
-  // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
 
   publishDir "${WD}/augustus/proc.raw_gene_set",
   mode: "copy"
@@ -660,10 +596,6 @@ process add_evidence_to_gff3 {
   cpus = 1
   maxForks = params.threads
 
-  // executor = "${params.executor}"
-  // module = []
-  // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
-
   publishDir "${WD}/augustus/proc.raw_gene_set",
   mode: "copy"
 
@@ -688,10 +620,6 @@ process get_ultrashort_peptides {
   executor = "local"
   cpus = 1
   maxForks = params.threads
-
-  // executor = "${params.executor}"
-  // module = []
-  // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
 
   publishDir "${WD}/augustus/proc.raw_gene_set",
   mode: "copy"
@@ -720,10 +648,6 @@ process genes_over_repeats {
   executor = "local"
   cpus = 1
   maxForks = params.threads
-
-  // executor = "${params.executor}"
-  // module = []
-  // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
 
   publishDir "${WD}/augustus/proc.raw_gene_set",
   mode: "copy",
@@ -761,10 +685,6 @@ process filter_genes {
   cpus = 1
   maxForks = params.threads
 
-  // executor = "${params.executor}"
-  // module = []
-  // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
-
   publishDir "${WD}/augustus",
   mode: "copy"
 
@@ -798,10 +718,6 @@ process make_copy_for_gbrowse {
   cpus = 1
   maxForks = params.threads
 
-  // executor = "${params.executor}"
-  // module = []
-  // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
-
   publishDir "${WD}/augustus",
   mode: "copy",
   pattern: "*gff"
@@ -827,10 +743,6 @@ process get_clean_anno_fasta {
   executor = "local"
   cpus = 1
   maxForks = params.threads
-
-  // executor = "${params.executor}"
-  // module = []
-  // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
 
   publishDir "${WD}/augustus",
   mode: "copy"
@@ -879,10 +791,6 @@ process filtering_stats {
   cpus = 1
   maxForks = params.threads
 
-  // executor = "${params.executor}"
-  // module = []
-  // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
-
   publishDir "${WD}/augustus",
   mode: "copy",
   pattern: "*clean.stats.tsv"
@@ -923,10 +831,6 @@ process evidence_table {
   executor = "local"
   cpus = 1
   maxForks = params.threads
-
-  // executor = "${params.executor}"
-  // module = []
-  // clusterOptions = "-N 1 --ntasks-per-node 16 --account ${params.account} --partition ${params.partition} --qos ${params.qos}"
 
   publishDir "${WD}/augustus",
   mode: "copy",
