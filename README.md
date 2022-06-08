@@ -32,9 +32,23 @@ This pipeline takes the following input:
 - Augustus parameters
 - Optional: modelled repetitive elements in GFF format
 
+It automates the following steps:
+- exon hints generation
+- intron hints generation
+- hints integration from multiple sources (PSL, BAM from short reads, BAM from long reads)
+- hints prioritization
+- parallelized gene prediction with Augustus
+- gene set filtering based on evidence (0%, 1-99%, 100%)
+- mRNA and protein sequence extraction
+- removal of genes overlapping repetitive elements
+- removal of ultrashort peptides
+- production of a GBrowse-ready GFF file
+- evaluation of run statistics and metrics in a file
+
 It produces the following output:
 - Raw and high quality gene sets predicted on the genome sequence
 - Protein and transcript sequences of the predicted genes
+- Run statistics and metrics 
 
 ### Quick setup and run
 
