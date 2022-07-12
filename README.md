@@ -25,14 +25,14 @@ Barcelona Supercomputing Center (BSC-CNS)
 ### What is this for?
 
 This pipeline takes the following input:
-- PSL mapping files
-- BAM mapping files from short reads (e.g. illumina)
-- BAM mapping files from long reads (e.g. pacbio, nanopore)
+- Raw sequencing reads (pacbio, nanopore, illumina) in a table (`--input_data`)
 - A genome sequence
 - Augustus parameters
 - Optional: modelled repetitive elements in GFF format
 
 It automates the following steps:
+- read preprocessing
+- read mapping
 - exon hints generation
 - intron hints generation
 - hints integration from multiple sources (PSL, BAM from short reads, BAM from long reads)
@@ -48,7 +48,7 @@ It automates the following steps:
 It produces the following output:
 - Raw and high quality gene sets predicted on the genome sequence
 - Protein and transcript sequences of the predicted genes
-- Run statistics and metrics 
+- Run statistics and metrics
 
 ### Quick setup and run
 
@@ -120,8 +120,6 @@ https://math-inf.uni-greifswald.de/storages/uni-greifswald/fakultaet/mnf/mathinf
 
 #### Run the pipeline
 
-Once you have filtered and sorted mapping records from at least one source (be it [hisat2](http://daehwankimlab.github.io/hisat2/manual "HISAT2 manual"), [BLAT](https://genome.ucsc.edu/goldenpath/help/blatSpec.html "BLAT manual"), or [minimap2](https://lh3.github.io/minimap2/minimap2.html "minimap2 manual")), you can use the pipeline.
-
 To run the pipeline, here is a basic command:
 
 ```
@@ -129,9 +127,7 @@ nextflow run main.nf \
 --species_name <species_name> \
 --genome_fasta <your_FASTA_file> \
 --repeats_gff <repeat_GFF_annotation> \
---bam_long <dir_containing_long-read_BAM_files> \
---bam <short_read_BAM_files_dir> \
---psl <short_read_PSL_files_dir> \
+--input_data <input_data_table>
 ```
 
 An example run is found in a `run**.sh` script that I provided within this github repo. Have a look at that script carefully to see how I set things.
