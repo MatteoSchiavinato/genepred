@@ -1,0 +1,4 @@
+sample_id read_type reads_for reads_rev
+<sample_A>  PE  read_1.fastq  read_2.fastq
+<sample_B>  SE  reads.fastq -
+<sample_C>  LONG  reads.fastq - 
