@@ -139,7 +139,7 @@ When using the pipeline, there is an option called `--species_name` which you mu
 
 ##### extrinsic cfg file
 
-Another file that Augustus wants is the `extrinsic.cfg` file. This file contains configuration parameters that Augustus uses. I provided one of these files inside this github repository which was optimized with Beta vulgaris reads. If you open it, you'll see that there are different values associated with different features.
+Another file that Augustus wants is the `extrinsic.cfg` file. This file contains configuration parameters that Augustus uses. I provided one of these files inside this github repository. If you open it, you'll see that there are different values associated with different features.
 
 Read the Augustus official manual to understand what they mean:
 
