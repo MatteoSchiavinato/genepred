@@ -73,17 +73,30 @@ Channel
   .map{ it -> [it.sample_id, it.read_type, it.reads_for, it.reads_rev] }
   .into{ Input_data_1; Input_data_2; Input_data_3; Input_data_4 }
 
+Input_data_1
+  .filter{ it[1] == "PE" }
+  .map{ it -> [it[0], file(it[2]), file(it[3])] }
+  .set{ Input_data_PE }
+
+Input_data_2
+  .filter{ it[1] == "SE" }
+  .map{ it -> [it[0], file(it[2])] }
+  .set{ Input_data_SE }
+
+Input_data_3
+  .filter{ it[1] == "ONT" }
+  .map{ it -> [it[0], file(it[2])] }
+  .set{ Input_data_ONT }
+
+Input_data_4
+  .filter{ it[1] == "PB" }
+  .map{ it -> [it[0], file(it[2])] }
+  .set{ Input_data_PB }
+
 
 // paired end reads
 
 if (params.paired_end) {
-
-  // form channel
-
-  Input_data_1
-    .filter{ it[1] == "PE" }
-    .map{ it -> [it[0], file(it[2]), file(it[3])] }
-    .set{ Input_data_PE }
 
   // trim reads
 
@@ -173,13 +186,6 @@ if (params.paired_end) {
 
 if (params.single_end) {
 
-  // form channel
-
-  Input_data_2
-    .filter{ it[1] == "SE" }
-    .map{ it -> [it[0], file(it[2])] }
-    .set{ Input_data_SE }
-
   // trim reads
 
   process trim_SE_reads {
@@ -264,13 +270,6 @@ if (params.single_end) {
 
 if (params.nanopore) {
 
-  // form channel
-
-  Input_data_3
-    .filter{ it[1] == "ONT" }
-    .map{ it -> [it[0], file(it[2])] }
-    .set{ Input_data_ONT }
-
   // convert ONT reads to FASTA
 
   process ONT_to_FASTA {
@@ -349,13 +348,6 @@ if (params.nanopore) {
 // pacbio reads
 
 if (params.pacbio) {
-
-  // form channel
-
-  Input_data_4
-    .filter{ it[1] == "PB" }
-    .map{ it -> [it[0], file(it[2])] }
-    .set{ Input_data_PB }
 
   // convert PB reads to FASTA
 
@@ -634,7 +626,7 @@ if (Filt_bams_short) {
     script:
       """
       ${PERL} \
-      ${projectDir}/src/RNA-seq-noise-reduction.v2.0.pl \
+      ${params.source_dir}/RNA-seq-noise-reduction.v2.0.pl \
       ${intron} \
       ${wig} \
       ${sample_id}.${read_type}.introns.nr.gff \
@@ -777,7 +769,7 @@ process split_genome {
   script:
     """
     ${PYTHON3} \
-    ${projectDir}/src/split_sequences.py \
+    ${params.source_dir}/split_sequences.py \
     --input-fasta ${fasta} \
     --num-out-files ${params.threads}
     """
@@ -785,7 +777,7 @@ process split_genome {
   stub:
     """
     ${PYTHON3} \
-    ${projectDir}/src/split_sequences.py \
+    ${params.source_dir}/split_sequences.py \
     --input-fasta ${fasta} \
     --num-out-files ${params.threads}
     """
@@ -906,7 +898,7 @@ process add_evidence_to_gff3 {
   script:
   """
   ${PYTHON3} \
-  ${projectDir}/src/add_evidence_to_gff3_file.py \
+  ${params.source_dir}/add_evidence_to_gff3_file.py \
   --input ${aug_joined} \
   --output ${params.species_name}.evidence.gff
   """
@@ -964,7 +956,7 @@ process filter_genes {
     sort -k1.2n,1.20 | uniq \
     > removed_genes.txt &&
     ${PYTHON3} \
-    ${projectDir}/src/filter_raw_gene_set.py \
+    ${params.source_dir}/filter_raw_gene_set.py \
     --input ${aug_evidence} \
     --remove-genes removed_genes.txt \
     --min-evidence ${params.min_evidence} \
@@ -1026,12 +1018,12 @@ process get_clean_anno_fasta {
   cut -d "=" -f 2 \
   > ${params.species_name}.clean.transcript_names.txt &&
   ${PYTHON3} \
-  ${projectDir}/src/select-sequences-from-filename.py \
+  ${params.source_dir}/select-sequences-from-filename.py \
   -in ${aug_aa} \
   -out ${params.species_name}.clean.aa \
   -n ${params.species_name}.clean.transcript_names.txt &&
   ${PYTHON3} \
-  ${projectDir}/src/select-sequences-from-filename.py \
+  ${params.source_dir}/select-sequences-from-filename.py \
   -in ${aug_codingseq} \
   -out ${params.species_name}.clean.codingseq \
   -n ${params.species_name}.clean.transcript_names.txt
